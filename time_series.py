@@ -1,5 +1,4 @@
 import numpy
-import csv
 
 
 class TimeSeries(numpy.ndarray):
@@ -144,22 +143,12 @@ class TimeSeries(numpy.ndarray):
         if dataIndex is None:
             dataIndex = 0
 
-        # create csv reader
+        lines = numpy.genfromtxt(filePath, delimiter=",")
 
-        reader = csv.reader(open(filePath, "rU"))
-
-        # read all rows
-
-        rows = [row for row in reader]
-
-        # read time series data into list
-
-        data = [float(row[dataIndex]) for row in rows]
-
-        # if column index of time data is given, read it aswell
+        data = lines[:, dataIndex]
 
         if timeIndex is not None:
-            time = [float(row[timeIndex]) for row in rows]
+            time = lines[:, timeIndex]
         else:
             time = None
 
