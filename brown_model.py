@@ -6,13 +6,32 @@ from time_series import TimeSeries
 class BrownModel(Model):
     r"""
     Class representing Brown's exponential smoothing model.
+    
+    NOTES:
+        For any `a \in [0,1]` we can count  moving average 
+        `\hat{m_t}` for `t=1,\dots, n` with recursion:
+        
+        .. MATH:: 
+            \hat{m_t} = a X_t + (1-a)\hat{m_{t-1}}
+            \hat{m_1} = X_1
+        
+        Thus for `t \ge 2` 
+        .. MATH:
+        \hat{m}_t = \sum\limits_{j=0}^{t-2} a (1 - a)^j x_{t-j} + (1 
+
+- a)^{t-1} X_1    
+    
+        Paramet `a` we choose for trail-end-error method. 
+
     """
 
     obligatory_parameters = ("alpha", )
 
     def __init__(self, data, alpha=0.3):
         r"""
-        Initialize new instance of BronwModel class with given parameters and
+        Initialize new instance of BronwModel class with given 
+
+parameters and
         data.
 
         :param data: data to constructed smoothened model.
@@ -42,26 +61,36 @@ class BrownModel(Model):
         r"""
         Set new value of this model's smoothing parameter.
 
-        :param value: new value of smoothing parameter. ``value`` should lie
+        :param value: new value of smoothing parameter. ``value`` 
+
+should lie
             in the interval [0,1].
 
         :type value: float.
 
-        :raise: ValueError if value of alpha is greater than 1 or lesser than
+        :raise: ValueError if value of alpha is greater than 1 or 
+
+lesser than
             0.
         """
         if 0 <= value <= 1:
             self.__alpha = value
         else:
-            raise ValueError("alpha must be a number from the interval [0,1].")
+            raise ValueError("alpha must be a number from the \
+
+interval [0,1].")
 
     @property
     def estimated_series(self):
         r"""
-        Get series estimated from this model using data from which it was
+        Get series estimated from this model using data from which it 
+
+was
         constructed.
 
-        :return: sequence of estimated values, i.e. smoothened time series
+        :return: sequence of estimated values, i.e. smoothened time 
+
+series
             given as the data parameter.
 
         :rtype: TimeSeries.
@@ -73,15 +102,21 @@ class BrownModel(Model):
         r"""
         Get forecast offset of this model.
 
-        :return: forecast offset of this model. Forecast offset is the time
-            after which model starts to estimate consequtive values in
+        :return: forecast offset of this model. Forecast offset is 
+
+the time
+            after which model starts to estimate consequtive values 
+
+in
             initial data. For Brown's model this is always 1.
 
         :rtype: integer.
 
         NOTES:
 
-            This method is included primarily to maintain compatibility with
+            This method is included primarily to maintain 
+
+compatibility with
             abstract model framework.
         """
         return 1
@@ -99,11 +134,15 @@ class BrownModel(Model):
 
         :rtype: float.
 
-        :raise: ValueError if ``param`` is anything different than "apha".
+        :raise: ValueError if ``param`` is anything different than 
+
+"apha".
 
         NOTES:
 
-            This method is included primarily to maintain compatibility with
+            This method is included primarily to maintain 
+
+compatibility with
             abstract model framework.
         """
         if param == "alpha":
@@ -114,22 +153,29 @@ class BrownModel(Model):
         r"""
         Set value of a given parameter in this model.
 
-        :param param: parameter for which value should be set. The only
+        :param param: parameter for which value should be set. The 
+
+only
             valid value for Brown's model is "alpha".
 
         :type param: float.
 
-        :param value: new value for the parameter. For parameter alpha it
+        :param value: new value for the parameter. For parameter 
+
+alpha it
             should be float in range from the interval [0,1].
 
         :type value: float.
 
-        :raise: ValueError if ``param`` is anything different than "alpha"
+        :raise: ValueError if ``param`` is anything different than 
+
+"alpha"
             or if ``value`` doesn't lie in the interval [0,1].
 
         NOTES:
+            This method is included primarily to maintain 
 
-            This method is included primarily to maintain compatibility with
+compatibility with
             abstract model framework.
         """
         if param == "alpha":
@@ -139,7 +185,9 @@ class BrownModel(Model):
 
     def recalculate_model(self):
         r"""
-        Recalculate model. This method is used to calculate smoothed values
+        Recalculate model. This method is used to calculate smoothed 
+
+values
         from model's empirical data.
         """
         sample_size = len(self.data)
@@ -153,5 +201,7 @@ class BrownModel(Model):
 
         self.components = {}
         self.components["smoothened"] = self.__estimated_series = \
-                                                            TimeSeries(m_t)
+                                                            
+
+TimeSeries(m_t)
         self.components["residues"] = self.goodness_info.errors
