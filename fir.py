@@ -41,6 +41,7 @@ class firFilter(object):
         :rtype: array-like, dependent on type of signal. If signal is subclass
             of numpy.ndarray then returned array is of the same type, otherwise
             it is numpy.ndarray.
+	:raise: ValueError if signal is empty
         """
 
         if issubclass(type(signal), numpy.ndarray):

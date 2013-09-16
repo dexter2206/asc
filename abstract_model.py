@@ -7,6 +7,21 @@ class Model(object):
     Class representing abstract statistical model of time series. Its
     intended use is to be baseclass for specific models like exponential
     smoothing models, or ARMA models.
+
+    NOTES:
+    	ARMA model is stationary stochastics process consist of two parts --  auto-regression (AR) and moving average (MA) part. This process describe equation for any `t`:
+       .. MATH::
+		X_t = c + Z_t +  \sum_{i=1}^p \varphi_i X_{t-i} + \sum_{i=1}^q \theta_i Z_{t-i},
+	where `Z_t` is equal white noise with average `0` and \ variance `\sigma^2`.
+       In short:
+	.. MATH::
+		\varphi (B) X_t = \theta(B) Z_t,
+       for `t = 1, \pm 1, \pm 2, \dots `
+       where `\varphi` and `\theta` are polynomial `p` and `q` degree corectly:
+      .. MATH::
+		\varphi (u) = 1 - \varphi_1 u - \dots - \varphi_p u^p
+		\theta(u) = 1 + \theta_1 u + \dots + \theta_q u^q.
+	
     """
     def __init__(self, parameters, data):
         r"""
