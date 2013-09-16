@@ -8,20 +8,19 @@ class BrownModel(Model):
     Class representing Brown's exponential smoothing model.
     
     NOTES:
-        For any `a \in [0,1]` we can count  moving average 
-        `\hat{m_t}` for `t=1,\dots, n` with recursion:
+	Brown's model is described by moving average `\hat{m_t}` \ 	for `t=1,\dots, n`, which we can count with recursion:
         
         .. MATH:: 
             \hat{m_t} = a X_t + (1-a)\hat{m_{t-1}}
             \hat{m_1} = X_1
-        
+        for any `a \in [0,1].`
         Thus for `t \ge 2` 
         .. MATH:
         \hat{m}_t = \sum\limits_{j=0}^{t-2} a (1 - a)^j x_{t-j} + (1 
 
 - a)^{t-1} X_1    
     
-        Paramet `a` we choose for trail-end-error method. 
+        Paramet `a` we choose for trial and error method. 
 
     """
 
