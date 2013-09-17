@@ -1,5 +1,5 @@
 from estimation_goodness_info import EstimationGoodnessInfo
-from indexer_property import IndexerProperty
+from asc.utils.indexer_property import IndexerProperty
 
 
 class Model(object):

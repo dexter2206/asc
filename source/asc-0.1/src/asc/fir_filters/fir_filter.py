@@ -1,5 +1,5 @@
 import numpy
-from time_series import TimeSeries
+from asc.core.time_series import TimeSeries
 
 
 class firFilter(object):

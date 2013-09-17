@@ -1,5 +1,5 @@
 import numpy
-from indexer_property import IndexerProperty
+from asc.utils.indexer_property import IndexerProperty
 
 
 class EstimationGoodnessInfo(object):

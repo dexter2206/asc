@@ -1,6 +1,6 @@
 import numpy
 from abstract_model import Model
-from time_series import TimeSeries
+from asc.core.time_series import TimeSeries
 
 
 class BrownModel(Model):
