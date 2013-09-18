@@ -1,5 +1,5 @@
 import numpy
-from fir import firFilter
+from fir_filter import firFilter
 
 
 class MA(firFilter):
