@@ -212,9 +212,11 @@ class TimeSeries(numpy.ndarray):
         # in uniform way: lag[:-0] doesn't mean nothing
 
         if lag == 0:
-            return v.dot(v) / sample_size
+	    ret = v.dot(v) 
+	else:
+	  ret = v[:-lag].dot(v[lag:])
 
-        return v[:-lag].dot(v[lag:]) / (sample_size - lag)
+        return ret / sample_size
 
     def auto_corr(self, lag=1):
         r"""
@@ -242,7 +244,7 @@ class TimeSeries(numpy.ndarray):
 
             where `\gamma` is series autocovariance function.
         """
-        return self.auto_cov(lag) / self.auto_cov(0)
+        return self.auto_cov(lag) / self.auto_cov(0) 
 
     def get_acv_series(self):
         r"""
@@ -250,7 +252,7 @@ class TimeSeries(numpy.ndarray):
         possible lags.
 
         :return: time series containing estimations of autocovariance of this
-            time series'with lags ranging from 0 to len(self)-1.
+            time series'with lags ranging from 0 to len(self)-1. 
 
         :rtype: TimeSeries.
 
