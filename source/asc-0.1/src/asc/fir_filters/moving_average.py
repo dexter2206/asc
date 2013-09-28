@@ -27,7 +27,7 @@ class MA(firFilter):
 
         :rtype: integer.
         """
-        return len(self)
+        return len(self._firFilter__ir)
 
     @step.setter
     def step(self, value):
