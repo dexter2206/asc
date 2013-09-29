@@ -1,4 +1,5 @@
 import numpy
+import asc
 
 
 class TimeSeries(numpy.ndarray):
@@ -372,3 +373,6 @@ class TimeSeries(numpy.ndarray):
 
         return TimeSeries(
             [self.partial_autocorr(k + 1) for k in xrange(len(self))])
+
+    def get_histogram(self, bins=10, normed=True, range=None):
+        return asc.core.Histogram(self, bins, normed, range)
