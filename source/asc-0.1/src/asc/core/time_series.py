@@ -2,6 +2,7 @@ import numpy
 
 
 class TimeSeries(numpy.ndarray):
+
     r"""
     Class for representing time series. It has fields for representing both
     time series data and time axis, as well as methods for basic manipulation
@@ -32,7 +33,7 @@ class TimeSeries(numpy.ndarray):
 
         :type cls: type.
 
-        :param input_array: array containing TimeSeries data. Can be anny object
+        :param input_array: array containing TimeSeries data. Can be any object
             from which numpy can instantiate ndarray.
 
         :type input_array: array-like.
@@ -128,8 +129,8 @@ class TimeSeries(numpy.ndarray):
         :type dataIndex: integer.
 
         :param timeIndex: index of column containing time labels corresponding
-            to data from dataIndex column. Should be nonnegative integer or none
-            if there is no such data in csv file. Default is None.
+            to data from dataIndex column. Should be nonnegative integer or
+            none if there is no such data in csv file. Default is None.
 
         :type timeIndex: integer or None.
 
@@ -175,7 +176,7 @@ class TimeSeries(numpy.ndarray):
             sage: ts.covariance(lag=3)
             -4.252985
 
-        Check that the series covariance with lag = 0 is equal to its variance::
+        Check that the series covariance with lag = 0 is equal to its variance:
 
             sage: ts = TimeSeries([random() for k in xrange(100)])
             sage: ts.var() = ts.covariance(0)
@@ -212,9 +213,9 @@ class TimeSeries(numpy.ndarray):
         # in uniform way: lag[:-0] doesn't mean nothing
 
         if lag == 0:
-	    ret = v.dot(v) 
-	else:
-	  ret = v[:-lag].dot(v[lag:])
+            ret = v.dot(v)
+        else:
+            ret = v[:-lag].dot(v[lag:])
 
         return ret / sample_size
 
@@ -244,7 +245,7 @@ class TimeSeries(numpy.ndarray):
 
             where `\gamma` is series autocovariance function.
         """
-        return self.auto_cov(lag) / self.auto_cov(0) 
+        return self.auto_cov(lag) / self.auto_cov(0)
 
     def get_acv_series(self):
         r"""
@@ -252,7 +253,7 @@ class TimeSeries(numpy.ndarray):
         possible lags.
 
         :return: time series containing estimations of autocovariance of this
-            time series'with lags ranging from 0 to len(self)-1. 
+            time series'with lags ranging from 0 to len(self)-1.
 
         :rtype: TimeSeries.
 
@@ -349,3 +350,25 @@ class TimeSeries(numpy.ndarray):
             diffs = diffs[lag:] - diffs[:-lag]
 
         return TimeSeries(diffs)
+
+    def partial_autocorr(self, lag=0):
+
+        lag = numpy.absolute(lag)
+
+        if lag == 0:
+            raise ValueError("Lag in partial autocorrelation must be nonzero.")
+
+        cors = numpy.zeros((lag, lag))
+
+        for i in xrange(lag):
+            for j in xrange(lag - i):
+                cors[i, i + j] = cors[i + j, i] = self.auto_corr(j)
+
+        ro = numpy.array([self.auto_corr(k + 1) for k in xrange(lag)])
+
+        return numpy.linalg.solve(cors, ro)[lag - 1]
+
+    def get_pacf_series(self):
+
+        return TimeSeries(
+            [self.partial_autocorr(k + 1) for k in xrange(len(self))])
